@@ -1,3 +1,9 @@
+mod components;
+mod inputs;
+mod iterations;
+
+use crate::{components::ProgressBar, inputs::UncontrolledInput, iterations::DynamicList};
+use crate::{inputs::ControlledInput, iterations::StaticList};
 use leptos::*;
 
 fn main() {
@@ -13,6 +19,11 @@ fn App(cx: Scope) -> impl IntoView {
 
     view! {
         cx,
+
+        <ControlledInput />
+
+        <UncontrolledInput />
+
         <button on:click=move |_| {
                 set_count.update(|n| *n += 1);
             }
@@ -30,24 +41,17 @@ fn App(cx: Scope) -> impl IntoView {
 
         <p>"Double count: " {double_count}</p>
         <ProgressBar progress= Signal::derive(cx, double_count ) />
-    }
-}
 
-///This shows the progress to a goal
-#[component]
-fn ProgressBar(
-    cx: Scope,
-    /// The maximum value of the progress bal
-    #[prop(default = 100)]
-    max: u16,
-    /// How much progress should be displayed
-    #[prop(into)]
-    progress: Signal<i32>,
-) -> impl IntoView {
-    view! {cx,
-        <progress
-            max=max
-            value = progress
-        />
+
+        <br/>
+
+        <h1>"Iteration"</h1>
+        <h2>"Static List"</h2>
+        <p>"Use this pattern if the list itself is static."</p>
+        <StaticList length=5/>
+
+        <h2>"Dynamic List"</h2>
+        <p>"Use this pattern if the rows in your list will change."</p>
+        <DynamicList initial_length=10/>
     }
 }
